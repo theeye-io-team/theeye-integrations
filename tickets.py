@@ -103,12 +103,23 @@ elif config['modo_update']['modo'] == 'LISTA':
         append(str(i))
         time.sleep(2)
 
-with open('_sidebar.md', 'r+', encoding='utf-8') as s:
-    s.truncate(0)
-    for d in dic:
-        s.write('* ' + d)
-        s.write('\n')
-        for l in dic[d]:
-            s.write('   - [- '+ l +'](clientes/'+ l.replace(' ','') +'.md)')
+if os.path.exists('_sidebar.md'):
+    with open('_sidebar.md', 'r+', encoding='utf-8') as s:
+        s.truncate(0)
+        for d in dic:
+            s.write('* ' + d)
             s.write('\n')
+            for l in dic[d]:
+                s.write('   - [- '+ l +'](clientes/'+ l.replace(' ','') +'.md)')
+                s.write('\n')
+else:
+    f = open('_sidebar.md', 'a', encoding='utf-8')
+    f.close()
+    with open('_sidebar.md', 'r+', encoding='utf-8') as s:
+        for d in dic:
+            s.write('* ' + d)
+            s.write('\n')
+            for l in dic[d]:
+                s.write('   - [- '+ l +'](clientes/'+ l.replace(' ','') +'.md)')
+                s.write('\n')
 print(dic)
