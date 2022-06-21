@@ -2,7 +2,7 @@
 const https = require('https')
 
 // NodeJs boilerplate
-const main = async () => {
+const main = module.exports = async () => {
   const payload = JSON.parse(process.argv[2])
 
   console.log(payload)
