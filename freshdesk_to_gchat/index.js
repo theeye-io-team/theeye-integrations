@@ -11,7 +11,7 @@ const main = module.exports = async () => {
   const { ticket_id, ticket_status, ticket_subject } = payload.freshdesk_webhook
   const value = await new Promise((resolve, reject) => {
 
-    const url = new URL(process.env.GCHAT_WEBHOOK_URL)
+    const url = new URL.parse(process.env.GCHAT_WEBHOOK_URL)
 
     const options = {
       host: url.host,
