@@ -1,5 +1,6 @@
 
 const https = require('https')
+const URL = require('url')
 
 // NodeJs boilerplate
 const main = module.exports = async () => {
@@ -10,9 +11,11 @@ const main = module.exports = async () => {
   const { ticket_id, ticket_status, ticket_subject } = payload.freshdesk_webhook
   const value = await new Promise((resolve, reject) => {
 
+    const url = new URL(process.env.GCHAT_WEBHOOK_URL)
+
     const options = {
-      host: 'chat.googleapis.com',
-      path: '/v1/spaces/AAAAvjrZDUg/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=fQDYKhF4-zQDwttRHWKmV7yeJa7qSoB4QDh310hr0p4%3D',
+      host: url.host,
+      path: url.path + url.search,
       method: 'POST',
       headers: {
         'Accept': 'application/json',
