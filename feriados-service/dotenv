@@ -1,0 +1,5 @@
+FERIADOS_WEBBOT_BASEURL = ""
+
+THEEYE_API_URL = ""https://supervisor.theeye.io""
+THEEYE_ORGANIZATION_NAME = """"
+THEEYE_ACCESS_TOKEN = ""

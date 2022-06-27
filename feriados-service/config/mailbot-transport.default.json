@@ -1,0 +1,16 @@
+{
+    "from": "",
+    "transport": {
+      "host": "",
+      "port": 0,
+      "auth": {
+        "user": "",
+        "pass": ""
+      },
+      "secureConnection": false,
+      "tls": {
+        "ciphers": "SSLv3"
+      },
+      "requireTLS": true
+    }
+}
