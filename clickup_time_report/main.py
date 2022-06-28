@@ -4,14 +4,6 @@ from datetime import datetime
 import csv
 from dateutil.parser import isoparse
 
-with open('config.json', encoding='utf-8') as jsonf:
-  config = json.load(jsonf)
-
-token = config['credenciales_click']['token']
-headers = {
-  'Authorization': token
-}
-
 def convertMillis(millis):
   millis = int(millis)
   minutes = int((millis/(1000*60))%60)/60
@@ -30,29 +22,38 @@ def convertDate(timestamp):
   timestamp = int(timestamp)/1000
   return datetime.utcfromtimestamp(timestamp).strftime('%d-%m-%Y')
 
-start_date = str(1655092893000)
-end_date = str(1655524893000)
-list_id = str(164990447)
-assignees = '42912747,42913437,42917149,42935313,42951995,42951996,42963494,42963495,42963497,42963500,42963502,43057293,43133669,43151767,43627923'
+def main(fromDate, toDate, id, filename)
+  with open('config.json', encoding='utf-8') as jsonf:
+    config = json.load(jsonf)
 
-request = requests.get('https://api.clickup.com/api/v2/team/30919240/time_entries?start_date='+ start_date +'&end_date='+ end_date +'&assignee='+assignees+'&include_task_tags=true&include_location_names=false&space_id=&folder_id=&list_id='+ list_id +'&custom_task_ids=false', headers=headers)
-   
-response_body = request
-result = json.loads(request.content.decode('utf-8'))
+  token = config['credenciales_click']['token']
+  headers = {
+    'Authorization': token
+  }
 
-with open('horas.csv', 'w', encoding='UTF8', newline='') as f:
-  writer = csv.writer(f, delimiter=';')
-  header = ['name','status','user','date','tags','start_time','end_time','duration']
-  writer.writerow(header)
-  for i in result['data']:
-    export = []
-    export.append(i['task']['name']) 
-    export.append(i['task']['status']['status'])
-    export.append(i['user']['username']) 
-    export.append(convertDate(i['start']))
-    export.append(i['tags'])
-    export.append(convertTime(i['start']))
-    export.append(convertTime(i['end'])) 
-    export.append(convertMillis(i['duration']))
+  start_date = str(convertStamp(fromDate))
+  end_date = str(convertStamp(toDate))
+  list_id = str(id) 
+  assignees = '42912747,42913437,42917149,42935313,42951995,42951996,42963494,42963495,42963497,42963500,42963502,43057293,43133669,43151767,43627923'
+
+  request = requests.get('https://api.clickup.com/api/v2/team/30919240/time_entries?start_date='+ start_date +'&end_date='+ end_date +'&assignee='+assignees+'&include_task_tags=true&include_location_names=false&space_id=&folder_id=&list_id='+ list_id +'&custom_task_ids=false', headers=headers)
     
-    writer.writerow(export)
+  response_body = request
+  result = json.loads(request.content.decode('utf-8'))
+
+  with open(filename, 'w', encoding='UTF8', newline='') as f:
+    writer = csv.writer(f, delimiter=';')
+    header = ['name','status','user','date','tags','start_time','end_time','duration']
+    writer.writerow(header)
+    for i in result['data']:
+      export = []
+      export.append(i['task']['name']) 
+      export.append(i['task']['status']['status'])
+      export.append(i['user']['username']) 
+      export.append(convertDate(i['start']))
+      export.append(i['tags'])
+      export.append(convertTime(i['start']))
+      export.append(convertTime(i['end'])) 
+      export.append(convertMillis(i['duration']))
+      
+      writer.writerow(export)
