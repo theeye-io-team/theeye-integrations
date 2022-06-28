@@ -4,3 +4,4 @@ clientes/*
 feriados-service/node_modules
 feriados-service/.env
 feriados-service/config/mailbot-transport.json
+feriados-service/config/service-customers.json

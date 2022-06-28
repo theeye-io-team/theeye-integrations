@@ -1,63 +1,23 @@
 require('dotenv').config({ path: './.env' })
 
-const Files = require('./libs/file')
-Files.access_token = process.env.SERVICES_HUB_TOKEN
-const { DateTime } = require('luxon')
-const crypto = require('crypto')
-const puppeteer = require('puppeteer')
-const baseUrl = process.env.FERIADOS_WEBBOT_BASEURL
+if(!process.env.FERIADOS_WEBBOT_BASEURL) throw new Error('Env FERIADOS_WEBBOT_BASEURL not defined.')
+if(!process.env.SERVICES_HUB_TOKEN) throw new Error('Env SERVICES_HUB_TOKEN not defined.')
 
-const browserOptions = {
-  headless: false,
-  handleSIGINT: true,
-  handleSIGTERM: true,
-  handleSIGHUP: true,
-  // executablePath: '/bin/google-chrome',
-  args: [
-    '--no-sandbox',
-    '--disable-features=site-per-process',
-    '--disable-gpu',
-    '--window-size=1920,1024'
-  ]
-}
+const crypto = require('crypto')
+const Files = require('./libs/file')
+const webbot = require('./libs/webbot')
+const sendEmail = require('./libs/sender')
+Files.access_token = process.env.SERVICES_HUB_TOKEN
+Files.customer = JSON.parse(process.env.THEEYE_ORGANIZATION_NAME)
+const serviceCustomers = require('./config/service-customers.json')
 
 const generateFingerprint = (string) => {
-    const hash = crypto.createHash('sha1')
-    hash.update(string)
-    return hash.digest('hex')
-  }
+  const hash = crypto.createHash('sha1')
+  hash.update(string)
+  return hash.digest('hex')
+}
 
-const main = module.exports = async (year) => {
-  if (!year) {
-    year = DateTime.now().toFormat('yyyy')
-  }
-
-  const url = `${baseUrl}${year}`
-
-  const browser = await puppeteer.launch(browserOptions)
-  const page = await browser.newPage()
-  await page.goto(url)
-
-  const feriados = await page.evaluate((year)=> {
-    const eles=[]
-
-    document.getElementById('calendar-container')
-      .querySelectorAll('div.cont').forEach( (ccc, index) => { 
-      ccc.querySelectorAll('p').forEach(p => {
-        const text = p.innerText
-        if (/\([a|b|c]\)$/.test(text) === false) {
-          const day = Number(text.split('.')[0])
-          if(text || day!==0) {
-            const month = String(index + 1)
-            eles.push(`${String(day).length === 1 ? `0${day}` : day}-${month.length === 1 ? `0${month}` : month}-${year}`)
-          }
-        }
-      })
-    })
-
-    return eles
-  }, year)
-  
+const checkForChanges = async (feriados) => {
   if(!feriados.length) {
     throw new Error('Failure fetching Feriados from page')
   }
@@ -72,14 +32,16 @@ const main = module.exports = async (year) => {
   const files = await Files.GetByFilename('feriados.json')
 
   if(!files.length) {
-    return Files.Upsert(fileData)
+    await Files.Upsert(fileData)
+    return fileData
   } else if (files.length === 1) {
     const fileContent = await Files.Download(files[0].id)
     const fileFingerprint = generateFingerprint(JSON.stringify(fileContent))
     const newFileFingerprint = generateFingerprint(JSON.stringify(feriados))
 
-    if( fileFingerprint !== newFileFingerprint) {
-      return Files.Upsert(fileData)
+    if(fileFingerprint !== newFileFingerprint) {
+      await Files.Upsert(fileData)
+      return fileData
     }
 
   } else {
@@ -89,6 +51,44 @@ const main = module.exports = async (year) => {
   throw new Error('No changes')
 }
 
+const processCustomers = async (feriados) => {
+  
+  const updates = {
+    webhook:0,
+    email:0,
+    skipped:0
+  }
+
+  for(const customer of serviceCustomers) {
+    if(customer.enabled) {
+      if(customer.type === 'webhook') {
+        Files.customer = customer.customer_name
+        Files.access_token = customer.target
+        await checkForChanges(feriados)
+        updates.webhook++
+      }
+
+      if(customer.type === 'email') {
+        await sendEmail(customer.target, feriados)
+        updates.email++
+      }
+
+    } else {
+      console.log(`customer ${customer.customer_name} disabled via service-customers config`)
+      updates.skipped++
+    }
+  }
+
+  return updates
+}
+
+const main = module.exports = async () => {
+  
+  const feriados = await webbot(process.env.FERIADOS_YEAR)
+  await checkForChanges(feriados)
+  return await processCustomers(feriados)
+}
+
 if(require.main === module) {
-    main(process.argv[2]).then(console.log).catch(console.error)
+    main().then(console.log).catch(console.error)
 }

@@ -4,8 +4,6 @@ const FormData = require('form-data')
 const Readable = require('stream').Readable
 
 const BASE_URL = JSON.parse(process.env.THEEYE_API_URL)
-const CUSTOMER = JSON.parse(process.env.THEEYE_ORGANIZATION_NAME)
-const THEEYE_ACCESS_TOKEN = process.env.THEEYE_ACCESS_TOKEN
 
 class TheEyeFile {
   #props;
@@ -60,7 +58,7 @@ class TheEyeFile {
 
   static async FetchAll () {
     const options = {
-      url: `${BASE_URL}/${CUSTOMER}/file?access_token=${TheEyeFile.access_token}`,
+      url: `${BASE_URL}/${TheEyeFile.customer}/file?access_token=${TheEyeFile.access_token}`,
       method: 'GET'
     }
 
@@ -71,7 +69,7 @@ class TheEyeFile {
   static async GetByFilename (filename) {
     const token = TheEyeFile.access_token
     const options = {
-      url: `${BASE_URL}/${CUSTOMER}/file?access_token=${token}&where\[filename\]=${filename}`,
+      url: `${BASE_URL}/${TheEyeFile.customer}/file?access_token=${TheEyeFile.access_token}&where\[filename\]=${filename}`,
       method: 'GET'
     }
 
@@ -81,7 +79,7 @@ class TheEyeFile {
 
   static async GetById (id) {
     const options = {
-      url: `${BASE_URL}/${CUSTOMER}/file/${id}?access_token=${TheEyeFile.access_token}`,
+      url: `${BASE_URL}/${TheEyeFile.customer}/file/${id}?access_token=${TheEyeFile.access_token}`,
       method: 'GET'
     }
 
@@ -91,7 +89,7 @@ class TheEyeFile {
 
   static async Download (id) {
     const options = {
-      url: `${BASE_URL}/${CUSTOMER}/file/${id}/download?access_token=${TheEyeFile.access_token}`,
+      url: `${BASE_URL}/${TheEyeFile.customer}/file/${id}/download?access_token=${TheEyeFile.access_token}`,
       method: 'GET'
     }
 
@@ -101,7 +99,7 @@ class TheEyeFile {
 
   static async Delete (id) {
     const options = {
-      url: `${BASE_URL}/${CUSTOMER}/file/${id}?access_token=${TheEyeFile.access_token}`,
+      url: `${BASE_URL}/${TheEyeFile.customer}/file/${id}?access_token=${TheEyeFile.access_token}`,
       method: 'DELETE'
     }
 
@@ -110,8 +108,9 @@ class TheEyeFile {
   }
 
   async create () {
+    
     const options = {
-      url: `${BASE_URL}/${CUSTOMER}/file?access_token=${TheEyeFile.access_token}`,
+      url: `${BASE_URL}/${TheEyeFile.customer}/file?access_token=${TheEyeFile.access_token}`,
       method: 'POST',
       formData: this.prepareFormData()
     }
@@ -124,7 +123,7 @@ class TheEyeFile {
     const id = this.#props.id
 
     const options = {
-      url: `${BASE_URL}/${CUSTOMER}/file/${id}?access_token=${TheEyeFile.access_token}`,
+      url: `${BASE_URL}/${TheEyeFile.customer}/file/${id}?access_token=${TheEyeFile.access_token}`,
       method: 'PUT',
       formData: this.prepareFormData()
     }
@@ -132,10 +131,6 @@ class TheEyeFile {
     const res = await Request(options)
     return res.body
   }
-}
-
-if (THEEYE_ACCESS_TOKEN) {
-  TheEyeFile.access_token = THEEYE_ACCESS_TOKEN
 }
 
 module.exports = TheEyeFile

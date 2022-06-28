@@ -1,0 +1,8 @@
+[
+    { 
+        "enabled":true,
+        "customer_name": "theeye_customer",
+        "type": "webhook | email", 
+        "target": "customer_token | email_recipients"
+    }
+]
