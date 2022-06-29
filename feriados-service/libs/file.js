@@ -67,7 +67,6 @@ class TheEyeFile {
   }
 
   static async GetByFilename (filename) {
-    const token = TheEyeFile.access_token
     const options = {
       url: `${BASE_URL}/${TheEyeFile.customer}/file?access_token=${TheEyeFile.access_token}&where\[filename\]=${filename}`,
       method: 'GET'

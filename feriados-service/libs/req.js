@@ -25,7 +25,9 @@ module.exports = (options) => {
     // it requires header: content-type: application/json
     // also JSON.stringify is required. don't trust the user
     if (options.json) {
-      options.headers['content-type'] = 'application/json'
+      if(!Object.keys(options.headers).filter((header)=>header.toUpperCase()==='content-type'.toUpperCase()).length) {
+        options.headers['content-type'] = 'application/json'
+      }
       requestBody = JSON.stringify(options.json)
     }
 

@@ -7,6 +7,7 @@ const crypto = require('crypto')
 const Files = require('./libs/file')
 const webbot = require('./libs/webbot')
 const sendEmail = require('./libs/sender')
+const Request = require('./libs/req')
 Files.access_token = process.env.SERVICES_HUB_TOKEN
 Files.customer = JSON.parse(process.env.THEEYE_ORGANIZATION_NAME)
 const serviceCustomers = require('./config/service-customers.json')
@@ -48,6 +49,7 @@ const checkForChanges = async (feriados) => {
     throw new Error('Multiple files with the same name...')
   }
 
+  return
   throw new Error('No changes')
 }
 
@@ -55,22 +57,32 @@ const processCustomers = async (feriados) => {
   
   const updates = {
     webhook:0,
+    files:0,
     email:0,
     skipped:0
   }
 
   for(const customer of serviceCustomers) {
     if(customer.enabled) {
-      if(customer.type === 'webhook') {
+      if(customer.type === 'file') {
         Files.customer = customer.customer_name
         Files.access_token = customer.target
         await checkForChanges(feriados)
-        updates.webhook++
+        updates.files++
       }
 
       if(customer.type === 'email') {
         await sendEmail(customer.target, feriados)
         updates.email++
+      }
+
+      if(customer.type === 'webhook') {
+        const options = customer.target
+        options.json = {
+          task_arguments:[feriados]
+        }
+        await Request(customer.target)
+        updates.webhook++
       }
 
     } else {
