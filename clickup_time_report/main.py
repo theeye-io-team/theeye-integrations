@@ -22,7 +22,7 @@ def convertDate(timestamp):
   timestamp = int(timestamp)/1000
   return datetime.utcfromtimestamp(timestamp).strftime('%d-%m-%Y')
 
-def main(fromDate, toDate, id, filename)
+def main(fromDate, toDate, id, filename):
   with open('config.json', encoding='utf-8') as jsonf:
     config = json.load(jsonf)
 
