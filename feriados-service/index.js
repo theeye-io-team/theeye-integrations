@@ -49,7 +49,6 @@ const checkForChanges = async (feriados) => {
     throw new Error('Multiple files with the same name...')
   }
 
-  return
   throw new Error('No changes')
 }
 

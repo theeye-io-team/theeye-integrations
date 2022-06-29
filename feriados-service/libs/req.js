@@ -28,6 +28,7 @@ module.exports = (options) => {
       if(!Object.keys(options.headers).filter((header)=>header.toUpperCase()==='content-type'.toUpperCase()).length) {
         options.headers['content-type'] = 'application/json'
       }
+      options.headers['content-length'] = Buffer.byteLength(JSON.stringify(options.json))
       requestBody = JSON.stringify(options.json)
     }
 
