@@ -1,15 +1,13 @@
 require('dotenv').config({ path: './.env' })
 
 if(!process.env.FERIADOS_WEBBOT_BASEURL) throw new Error('Env FERIADOS_WEBBOT_BASEURL not defined.')
-if(!process.env.SERVICES_HUB_TOKEN) throw new Error('Env SERVICES_HUB_TOKEN not defined.')
+if(!process.env.THEEYE_ACCESS_TOKEN) throw new Error('Env THEEYE_ACCESS_TOKEN not defined.')
 
 const crypto = require('crypto')
 const Files = require('./libs/file')
 const webbot = require('./libs/webbot')
 const sendEmail = require('./libs/sender')
 const Request = require('./libs/req')
-Files.access_token = process.env.SERVICES_HUB_TOKEN
-Files.customer = JSON.parse(process.env.THEEYE_ORGANIZATION_NAME)
 const serviceCustomers = require('./config/service-customers.json')
 
 const generateFingerprint = (string) => {
@@ -18,7 +16,7 @@ const generateFingerprint = (string) => {
   return hash.digest('hex')
 }
 
-const checkForChanges = async (feriados) => {
+const checkForChanges = async (feriados, customer, access_token) => {
   if(!feriados.length) {
     throw new Error('Failure fetching Feriados from page')
   }
@@ -30,18 +28,18 @@ const checkForChanges = async (feriados) => {
     content: JSON.stringify(feriados, null, 2)
   }
 
-  const files = await Files.GetByFilename('feriados.json')
+  const files = await Files.GetByFilename('feriados.json', customer, access_token)
 
   if(!files.length) {
-    await Files.Upsert(fileData)
+    await Files.Upsert(fileData, customer, access_token)
     return fileData
   } else if (files.length === 1) {
-    const fileContent = await Files.Download(files[0].id)
+    const fileContent = await Files.Download(files[0].id, customer, access_token)
     const fileFingerprint = generateFingerprint(JSON.stringify(fileContent))
     const newFileFingerprint = generateFingerprint(JSON.stringify(feriados))
 
     if(fileFingerprint !== newFileFingerprint) {
-      await Files.Upsert(fileData)
+      await Files.Upsert(fileData, customer, access_token)
       return fileData
     }
 
@@ -52,27 +50,27 @@ const checkForChanges = async (feriados) => {
   throw new Error('No changes')
 }
 
-const processCustomers = async (feriados) => {
-  
-  const updates = {
-    webhook:0,
-    files:0,
-    email:0,
-    skipped:0
-  }
+const processCustomers = (feriados) => {
 
+  const promiseArray = []
+  
   for(const customer of serviceCustomers) {
+    const customerData = {customer_name: customer.customer_name, customer_type: customer.type}
     if(customer.enabled) {
       if(customer.type === 'file') {
-        Files.customer = customer.customer_name
-        Files.access_token = customer.target
-        await checkForChanges(feriados)
-        updates.files++
+        promiseArray.push(new Promise ((res,rej)=>
+        checkForChanges(feriados, customer.customer_name, customer.target)
+        .then(()=>
+          res(customerData))
+        .catch(err=>rej(Object.assign({err},customerData)))))
       }
 
       if(customer.type === 'email') {
-        await sendEmail(customer.target, feriados)
-        updates.email++
+        promiseArray.push(new Promise ((res,rej)=>
+          sendEmail(customer.target, feriados)
+          .then(()=>
+            res(customerData))
+          .catch(err=>rej(Object.assign({err},customerData)))))
       }
 
       if(customer.type === 'webhook') {
@@ -80,24 +78,26 @@ const processCustomers = async (feriados) => {
         options.json = {
           task_arguments:[feriados]
         }
-        await Request(customer.target)
-        updates.webhook++
-      }
 
+        promiseArray.push(new Promise ((res,rej)=>
+          Request(customer.target)
+          .then(()=>
+            res(customerData))
+          .catch(err=>rej(Object.assign({err},customerData)))))
+      }
     } else {
-      console.log(`customer ${customer.customer_name} disabled via service-customers config`)
-      updates.skipped++
+      promiseArray.push(Promise.reject(Object.assign({err:new Error(`customer ${customer.customer_name} disabled via service-customers config`)}, customerData)))
     }
   }
 
-  return updates
+  return promiseArray
 }
 
 const main = module.exports = async () => {
   
   const feriados = await webbot(process.env.FERIADOS_YEAR)
   await checkForChanges(feriados)
-  return await processCustomers(feriados)
+  return Promise.allSettled(processCustomers(feriados))
 }
 
 if(require.main === module) {
