@@ -58,19 +58,16 @@ const processCustomers = (feriados) => {
     const customerData = {customer_name: customer.customer_name, customer_type: customer.type}
     if(customer.enabled) {
       if(customer.type === 'file') {
-        promiseArray.push(new Promise ((res,rej)=>
-        checkForChanges(feriados, customer.customer_name, customer.target)
-        .then(()=>
-          res(customerData))
-        .catch(err=>rej(Object.assign({err},customerData)))))
+        promiseArray.push(checkForChanges(feriados, customer.customer_name, customer.target)
+        .then(()=>customerData)
+        .catch(err=>err))
       }
 
       if(customer.type === 'email') {
-        promiseArray.push(new Promise ((res,rej)=>
+        promiseArray.push(
           sendEmail(customer.target, feriados)
-          .then(()=>
-            res(customerData))
-          .catch(err=>rej(Object.assign({err},customerData)))))
+          .then(()=>customerData)
+          .catch(err=>err))
       }
 
       if(customer.type === 'webhook') {
@@ -79,25 +76,24 @@ const processCustomers = (feriados) => {
           task_arguments:[feriados]
         }
 
-        promiseArray.push(new Promise ((res,rej)=>
+        promiseArray.push(
           Request(customer.target)
-          .then(()=>
-            res(customerData))
-          .catch(err=>rej(Object.assign({err},customerData)))))
+          .then(()=>customerData)
+          .catch(err=>err))
       }
     } else {
-      promiseArray.push(Promise.reject(Object.assign({err:new Error(`customer ${customer.customer_name} disabled via service-customers config`)}, customerData)))
+      // promiseArray.push(Promise.reject(Object.assign({err:new Error(`customer ${customer.customer_name} disabled via service-customers config`)}, customerData)))
     }
   }
 
-  return promiseArray
+  return Promise.allSettled(promiseArray)
 }
 
 const main = module.exports = async () => {
   
   const feriados = await webbot(process.env.FERIADOS_YEAR)
   await checkForChanges(feriados)
-  return Promise.allSettled(processCustomers(feriados))
+  return processCustomers(feriados)
 }
 
 if(require.main === module) {
