@@ -25,11 +25,12 @@ module.exports = (options) => {
     // it requires header: content-type: application/json
     // also JSON.stringify is required. don't trust the user
     if (options.json) {
-      if(!Object.keys(options.headers).filter((header)=>header.toUpperCase()==='content-type'.toUpperCase()).length) {
+      if(!Object.keys(options.headers).some(()=>/content-type/gi)) {
         options.headers['content-type'] = 'application/json'
       }
       options.headers['content-length'] = Buffer.byteLength(JSON.stringify(options.json))
-      requestBody = JSON.stringify(options.json)
+
+      typeof requestBody === 'object' ? requestBody = JSON.stringify(options.json) : requestBody
     }
 
     const requestOptions = Object.assign({}, options, {
