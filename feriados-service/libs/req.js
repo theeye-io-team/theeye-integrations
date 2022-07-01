@@ -30,7 +30,7 @@ module.exports = (options) => {
       }
       options.headers['content-length'] = Buffer.byteLength(JSON.stringify(options.json))
 
-      typeof requestBody === 'object' ? requestBody = JSON.stringify(options.json) : requestBody
+      typeof options.json === 'object' ? requestBody = JSON.stringify(options.json) : requestBody
     }
 
     const requestOptions = Object.assign({}, options, {
