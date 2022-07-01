@@ -9,11 +9,13 @@ const webbot = require('./libs/webbot')
 const sendEmail = require('./libs/sender')
 const Request = require('./libs/req')
 const serviceCustomers = require('./config/service-customers.json')
+const Transports = require('./constants')
 
-const generateFingerprint = (string) => {
-  const hash = crypto.createHash('sha1')
-  hash.update(string)
-  return hash.digest('hex')
+const main = module.exports = async () => {
+  
+  const feriados = await webbot(process.env.FERIADOS_YEAR)
+  await checkForChanges(feriados)
+  return processCustomers(feriados)
 }
 
 const checkForChanges = async (feriados, customer, access_token) => {
@@ -50,52 +52,54 @@ const checkForChanges = async (feriados, customer, access_token) => {
   throw new Error('No changes')
 }
 
+const generateFingerprint = (string) => {
+  const hash = crypto.createHash('sha1')
+  hash.update(string)
+  return hash.digest('hex')
+}
+
 const processCustomers = (feriados) => {
-
   const promiseArray = []
-  
-  for(const customer of serviceCustomers) {
-    const customerData = {customer_name: customer.customer_name, customer_type: customer.type}
-    if(customer.enabled) {
-      if(customer.type === 'file') {
-        promiseArray.push(checkForChanges(feriados, customer.customer_name, customer.target)
-        .then(()=>customerData)
-        .catch(err=>err))
-      }
-
-      if(customer.type === 'email') {
-        promiseArray.push(
-          sendEmail(customer.target, feriados)
-          .then(()=>customerData)
-          .catch(err=>err))
-      }
-
-      if(customer.type === 'webhook') {
-        const options = customer.target
-        options.json = {
-          task_arguments:[feriados]
-        }
-
-        promiseArray.push(
-          Request(customer.target)
-          .then(()=>customerData)
-          .catch(err=>err))
-      }
+  for (const customer of serviceCustomers) {
+    if (customer.enabled) {
+      const transport = TransportFactory[ customer.type ]({ feriados, customer })
+      promiseArray.push(
+        transport
+          .then(result => {
+            return customer
+          })
+          .catch(err => {
+            err.customer = customer
+            throw err
+          })
+      )
     } else {
-      // promiseArray.push(Promise.reject(Object.assign({err:new Error(`customer ${customer.customer_name} disabled via service-customers config`)}, customerData)))
+      promiseArray({ customer, message: 'disabled' })
     }
   }
 
   return Promise.allSettled(promiseArray)
 }
 
-const main = module.exports = async () => {
-  
-  const feriados = await webbot(process.env.FERIADOS_YEAR)
-  await checkForChanges(feriados)
-  return processCustomers(feriados)
+const TransportFactory = { }
+
+TransportFactory[ Transports.WEBHOOK_TRANSPORT ] = ({ feriados, customer }) => {
+  const options = customer.target
+  options.json = {
+    task_arguments:[feriados]
+  }
+
+  return Request(customer.target)
 }
 
-if(require.main === module) {
-    main().then(console.log).catch(console.error)
+TransportFactory[ Transports.EMAIL_TRANSPORT ] = ({ feriados, customer }) => {
+  return sendEmail(customer.target, feriados)
+}
+
+TransportFactory[ Transports.THEEYE_FILE_TRANSPORT ] = ({ feriados, customer }) => {
+  return checkForChanges(feriados, customer.customer_name, customer.target)
+}
+
+if (require.main === module) {
+  main().then(console.log).catch(console.error)
 }
