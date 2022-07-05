@@ -1,4 +1,5 @@
 import requests
+import os
 import json
 from datetime import datetime
 import csv
@@ -32,11 +33,8 @@ def getMembers(list_id, headers):
 
   return member_list
 
-def main(fromDate, toDate, id, filename, teamId):
-  with open('config.json', encoding='utf-8') as jsonf:
-    config = json.load(jsonf)
-
-  token = config['credenciales_click']['token']
+def main(fromDate, toDate, id, filename):
+  token = os.environ.get('CLICKUP_TOKEN')
   headers = {
     'Authorization': token
   }
@@ -45,6 +43,7 @@ def main(fromDate, toDate, id, filename, teamId):
   end_date = str(convertStamp(toDate))
   list_id = str(id) 
   assignees = getMembers(id, headers)
+  teamId = os.environ.get('TEAM_ID')
   
   request = requests.get('https://api.clickup.com/api/v2/team/'+teamId+'/time_entries?start_date='+start_date+'&end_date='+end_date+'&assignee='+assignees+'&include_task_tags=true&include_location_names=false&space_id=&folder_id=&list_id='+list_id+'&custom_task_ids=false', headers=headers)
     
