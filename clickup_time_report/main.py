@@ -39,8 +39,8 @@ def main(fromDate, toDate, id, filename):
     'Authorization': token
   }
 
-  start_date = str(convertStamp(fromDate))
-  end_date = str(convertStamp(toDate))
+  start_date = str(convertStamp(str(fromDate)))
+  end_date = str(convertStamp(str(toDate)))
   list_id = str(id) 
   assignees = getMembers(id, headers)
   teamId = os.environ.get('TEAM_ID')
