@@ -22,7 +22,17 @@ def convertDate(timestamp):
   timestamp = int(timestamp)/1000
   return datetime.utcfromtimestamp(timestamp).strftime('%d-%m-%Y')
 
-def main(fromDate, toDate, id, filename):
+def getMembers(list_id, headers):
+  request = requests.get('https://api.clickup.com/api/v2/list/'+list_id+'/member', headers=headers)
+  result = json.loads(request.content.decode('utf-8'))
+
+  member_list = ''
+  for i in result['members']:
+    member_list += (str(i['id']) + ',')
+
+  return member_list
+
+def main(fromDate, toDate, id, filename, teamId):
   with open('config.json', encoding='utf-8') as jsonf:
     config = json.load(jsonf)
 
@@ -34,9 +44,9 @@ def main(fromDate, toDate, id, filename):
   start_date = str(convertStamp(fromDate))
   end_date = str(convertStamp(toDate))
   list_id = str(id) 
-  assignees = '42912747,42913437,42917149,42935313,42951995,42951996,42963494,42963495,42963497,42963500,42963502,43057293,43133669,43151767,43627923'
-
-  request = requests.get('https://api.clickup.com/api/v2/team/30919240/time_entries?start_date='+ start_date +'&end_date='+ end_date +'&assignee='+assignees+'&include_task_tags=true&include_location_names=false&space_id=&folder_id=&list_id='+ list_id +'&custom_task_ids=false', headers=headers)
+  assignees = getMembers(id, headers)
+  
+  request = requests.get('https://api.clickup.com/api/v2/team/'+teamId+'/time_entries?start_date='+start_date+'&end_date='+end_date+'&assignee='+assignees+'&include_task_tags=true&include_location_names=false&space_id=&folder_id=&list_id='+list_id+'&custom_task_ids=false', headers=headers)
     
   response_body = request
   result = json.loads(request.content.decode('utf-8'))
