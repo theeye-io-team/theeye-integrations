@@ -48,7 +48,7 @@ const checkForChanges = async (feriados, customer, access_token) => {
   } else {
     throw new Error('Multiple files with the same name...')
   }
-
+  return
   throw new Error('No changes')
 }
 
@@ -74,7 +74,7 @@ const processCustomers = (feriados) => {
           })
       )
     } else {
-      promiseArray({ customer, message: 'disabled' })
+      promiseArray.push({ customer, message: 'disabled' })
     }
   }
 
