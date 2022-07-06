@@ -17,7 +17,7 @@ def convertTime(timestamp):
   return datetime.utcfromtimestamp(timestamp).strftime('%H:%M:%S')
 
 def convertStamp(date):
-  return isoparse(date).timestamp()
+  return int(isoparse(date).timestamp()) * 1000
 
 def convertDate(timestamp):
   timestamp = int(timestamp)/1000
@@ -39,8 +39,8 @@ def main(fromDate, toDate, id, filename):
     'Authorization': token
   }
 
-  start_date = str(convertStamp(str(fromDate)))
-  end_date = str(convertStamp(str(toDate)))
+  start_date = str(convertStamp(fromDate))
+  end_date = str(convertStamp(toDate))
   list_id = str(id) 
   assignees = getMembers(id, headers)
   teamId = os.environ.get('TEAM_ID')
