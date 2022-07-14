@@ -1,0 +1,26 @@
+[
+    { 
+        "enabled":false,
+        "customer_name": "",
+        "type": "file", 
+        "target": "theeye_customer_credential_token"
+    },
+    {
+        "enabled":false,
+        "customer_name":"",
+        "type":"email",
+        "target":"email1@example.com, email2@example.com, ..."
+    },
+    {
+        "enabled":false,
+        "customer_name":"",
+        "type":"webhook",
+        "target": {
+            "url":"http(s)://full.url[:optional_port]/full/endpoint/path",
+            "method":"GET | POST | PUT | ...",
+            "headers": {
+                "...":"..."
+            }
+        }
+    }
+]

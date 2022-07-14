@@ -1,0 +1,5 @@
+FERIADOS_WEBBOT_BASEURL = ""
+FERIADOS_YEAR=2022 #optional, will use current year if not set
+THEEYE_API_URL = ""https://supervisor.theeye.io""
+THEEYE_ORGANIZATION_NAME = """"
+SERVICES_HUB_TOKEN = ""
