@@ -1,11 +1,12 @@
 import requests
 import json
+import os
 
 def main(folderId, id, name, group):
   with open('config.json', encoding='utf-8') as jsonf:
     config = json.load(jsonf)
 
-  token = config['credenciales_click']['token']
+  token = os.environ.get('CLICKUP_TOKEN')
 
   headers = {
     'Authorization': token,
