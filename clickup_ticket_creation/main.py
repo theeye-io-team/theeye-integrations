@@ -3,9 +3,6 @@ import json
 import os
 
 def main(id, name, group):
-  with open('config.json', encoding='utf-8') as jsonf:
-    config = json.load(jsonf)
-
   token = os.environ.get('CLICKUP_TOKEN')
   folderId = os.environ.get('FOLDER_ID')
 
