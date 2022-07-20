@@ -20,7 +20,7 @@ def main(id, name, group):
   for i in result_list['lists']:
     listas[i['name']] = i['id']
 
-  subject = id +' - '+ name #webhook
+  subject = str(id) +' - '+ str(name) 
   goto = ''
 
   for i in listas:
