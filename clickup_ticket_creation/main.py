@@ -31,6 +31,9 @@ def main(id, name, group):
   for i in result_list['lists']:
     listas[i['name']] = i['id']
 
+  if group == 'Banco Comafi' and source == 'Email':
+    return None
+
   subject = str(id) +' - '+ str(name) 
   goto = ''
 
