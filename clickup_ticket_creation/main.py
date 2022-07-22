@@ -2,6 +2,17 @@ import requests
 import json
 import os
 
+def updateTicket(url, id):
+  api_key = os.environ.get('FRESHDESK_KEY')
+  password = 'x'
+  headers = {
+      "Content-Type": "application/json" 
+  }
+  query = '{ "custom_fields" : { "cf_si": "'+url+'"} }'
+  
+  r = requests.put('https://theeye.freshdesk.com/api/v2/tickets/' + str(id), auth = (api_key, password), data = query, headers=headers)
+
+
 def main(id, name, group):
   token = os.environ.get('CLICKUP_TOKEN')
   folderId = os.environ.get('FOLDER_ID')
@@ -50,3 +61,8 @@ def main(id, name, group):
   })
 
   request = requests.post('https://api.clickup.com/api/v2/list/'+ goto +'/task', data=values, headers=headers)
+
+  result = json.loads(request.content.decode('utf-8'))
+  url = result['url']
+
+  updateTicket(url, id)
