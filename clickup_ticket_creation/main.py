@@ -13,7 +13,7 @@ def updateTicket(url, id):
   r = requests.put('https://theeye.freshdesk.com/api/v2/tickets/' + str(id), auth = (api_key, password), data = query, headers=headers)
 
 
-def main(id, name, group):
+def main(id, name, group, source):
   token = os.environ.get('CLICKUP_TOKEN')
   folderId = os.environ.get('FOLDER_ID')
 
