@@ -20,7 +20,7 @@ and complete with the credentials provided by the installer (change this if your
    </tr> 
    <tr>
     <td> download SCANOSSWorkflow.json provided in this repo and import it into Theeye
-    /td>
+    </td>
     <td> 
          <img src="./images/imagen3.png">
          <img src="./images/imagen4.png">
@@ -28,8 +28,7 @@ and complete with the credentials provided by the installer (change this if your
    </tr> 
    <tr>
    <td>
-       You’ll need to set:
-       Github repository, which works with private and public repositories. But for this tutorial we are working on a public repository.
+       Set your Github repository, which works with private and public repositories. But for this tutorial we are working on a public repository.
    </td>
    <td>
          <img src="./images/imagen5.png">
@@ -38,7 +37,7 @@ and complete with the credentials provided by the installer (change this if your
    </tr> 
    <tr>
    <td>
-     Deployment approvers, in this demo both are the same. 
+     Now set the deployment approvers, in this demo both are the same. 
      The ones who receive the notification, in this demo, again, both are the same.
      And you should configure a Webhook to continue the deployment. However In this tutorial We are not setting this.
    </td>
