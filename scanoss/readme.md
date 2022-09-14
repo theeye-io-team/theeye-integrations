@@ -14,62 +14,63 @@ git clone https://github.com/theeye-io-team/theeye-of-sauron.git
 
 <table cellspacing="0" cellpadding="0">
    <tr>
-    <td> <img src="./images/imagen2.png"></td>
-    <td> Once is finished, please login navigate to http://localhost: port 6080
+    <td> Once is finished, please login at http://localhost:6080
 and complete with the credentials provided by the installer (change this if your are planing to expose to the internet).</td>
+    <td> <img src="./images/imagen2.png"></td>
    </tr> 
    <tr>
+    <td> download SCANOSSWorkflow.json provided in this repo and import it into Theeye
+    /td>
     <td> 
          <img src="./images/imagen3.png">
          <img src="./images/imagen4.png">
     </td>
-    <td> download SCANOSSWorkflow.json provided in this repo and import it into Theeye
-    You’ll need to set: </td>
    </tr> 
    <tr>
+   <td>
+       You’ll need to set:
+       Github repository, which works with private and public repositories. But for this tutorial we are working on a public repository.
+   </td>
    <td>
          <img src="./images/imagen5.png">
          <img src="./images/imagen6.png">
    </td>
-   <td>
-       Github repository, which works with private and public repositories. But for this tutorial we are working on a public repository.
-   </td>
    </tr> 
    <tr>
-   <td>
-         <img src="./images/imagen7.png">
-   </td>
    <td>
      Deployment approvers, in this demo both are the same. 
      The ones who receive the notification, in this demo, again, both are the same.
      And you should configure a Webhook to continue the deployment. However In this tutorial We are not setting this.
    </td>
+   <td>
+         <img src="./images/imagen7.png">
+   </td>
    </tr> 
    <tr>
-   <td>
-         <img src="./images/imagen8.png">
-   </td>
    <td>
      Once set up, we encourage you to manually play the workflow to see what happens.
    </td>
+   <td>
+         <img src="./images/imagen8.png">
+   </td>
    </tr> 
    <tr>
-   <td>
-         <img src="./images/imagen9.png">
-   </td>
    <td>
          We can see that it finds a deviation and asks for its approval, and we are done.
    </td>
+   <td>
+         <img src="./images/imagen9.png">
+   </td>
    </tr> 
    <tr>
+   <td>
+         We can start this workflow by configuring an outgoing webhook from github.
+   </td>
    <td>
          <img src="./images/imagen10.png">
          <img src="./images/imagen11.png">
          <img src="./images/imagen12.png">
 
-   </td>
-   <td>
-         We can start this workflow by configuring an outgoing webhook from github.
    </td>
    </tr> 
 </table>
