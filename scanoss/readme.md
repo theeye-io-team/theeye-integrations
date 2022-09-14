@@ -16,14 +16,14 @@ git clone https://github.com/theeye-io-team/theeye-of-sauron.git
    <tr>
     <td> Once is finished, please login at http://localhost:6080
 and complete with the credentials provided by the installer (change this if your are planing to expose to the internet).</td>
-    <td> <img src="./images/imagen2.png"></td>
+    <td> <img src="./images/imagen2.png" width="70%" height="auto" ></td>
    </tr> 
    <tr>
     <td> download SCANOSSWorkflow.json provided in this repo and import it into Theeye
     </td>
     <td> 
-         <img src="./images/imagen3.png">
-         <img src="./images/imagen4.png">
+         <img src="./images/imagen3.png" width="70%" height="auto" >
+         <img src="./images/imagen4.png" width="70%" height="auto" >
     </td>
    </tr> 
    <tr>
@@ -31,8 +31,8 @@ and complete with the credentials provided by the installer (change this if your
        Set your Github repository, which works with private and public repositories. But for this tutorial we are working on a public repository.
    </td>
    <td>
-         <img src="./images/imagen5.png">
-         <img src="./images/imagen6.png">
+         <img src="./images/imagen5.png" width="70%" height="auto" >
+         <img src="./images/imagen6.png" width="70%" height="auto" >
    </td>
    </tr> 
    <tr>
@@ -42,7 +42,7 @@ and complete with the credentials provided by the installer (change this if your
      And you should configure a Webhook to continue the deployment. However In this tutorial We are not setting this.
    </td>
    <td>
-         <img src="./images/imagen7.png">
+         <img src="./images/imagen7.png" width="70%" height="auto" >
    </td>
    </tr> 
    <tr>
@@ -50,7 +50,7 @@ and complete with the credentials provided by the installer (change this if your
      Once set up, we encourage you to manually play the workflow to see what happens.
    </td>
    <td>
-         <img src="./images/imagen8.png">
+         <img src="./images/imagen8.png" width="70%" height="auto" >
    </td>
    </tr> 
    <tr>
@@ -58,7 +58,7 @@ and complete with the credentials provided by the installer (change this if your
          We can see that it finds a deviation and asks for its approval, and we are done.
    </td>
    <td>
-         <img src="./images/imagen9.png">
+         <img src="./images/imagen9.png" width="70%" height="auto" >
    </td>
    </tr> 
    <tr>
@@ -66,9 +66,9 @@ and complete with the credentials provided by the installer (change this if your
          We can start this workflow by configuring an outgoing webhook from github.
    </td>
    <td>
-         <img src="./images/imagen10.png">
-         <img src="./images/imagen11.png">
-         <img src="./images/imagen12.png">
+         <img src="./images/imagen10.png" width="70%" height="auto" >
+         <img src="./images/imagen11.png" width="70%" height="auto" >
+         <img src="./images/imagen12.png" width="70%" height="auto" >
 
    </td>
    </tr> 
