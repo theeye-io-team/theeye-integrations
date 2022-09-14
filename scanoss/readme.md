@@ -1,7 +1,8 @@
  #how to integrate SCANOSS to your Continuous Integration Pipeline from github by using TheEye as the choreographer on a single machine. 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/GxjtUZ6cnKI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+If you want, check this 2 mins video:
+[![TITLE](https://img.youtube.com/vi/GxjtUZ6cnKI/0.jpg) (https://youtu.be/GxjtUZ6cnKI)
 
- <img src="./images/imagen1.png">
+ <img src="./images/imagen1.png" width="80%" height="auto" >
 
 ## Lets Begin
 ## First step is to install theeye. This tutorial was writing using Ubuntu 22.04. For achieving this task you need to clone our repository and run quickstart.sh
