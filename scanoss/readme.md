@@ -1,18 +1,20 @@
- #how to integrate SCANOSS to your Continuous Integration Pipeline from github by using TheEye as the choreographer on a single machine. 
-If you want, check this 2 mins video:
-[![TITLE](https://img.youtube.com/vi/GxjtUZ6cnKI/0.jpg) (https://youtu.be/GxjtUZ6cnKI)
-
+ # How to integrate SCANOSS to your Continuous Integration Pipeline from github by using TheEye as the choreographer on a single machine.
+ 
  <img src="./images/imagen1.png" width="80%" height="auto" >
 
+If you want, check this 2 mins video:
+[![Alt text](https://img.youtube.com/vi/GxjtUZ6cnKI/0.jpg)](https://youtu.be/GxjtUZ6cnKI)
+
 ## Lets Begin
-## First step is to install theeye. This tutorial was writing using Ubuntu 22.04. For achieving this task you need to clone our repository and run quickstart.sh
+## First step is to install theeye. 
+This tutorial was writing using Ubuntu 22.04. For achieving this task you need to clone our repository and run quickstart.sh
 
 Please run:
  ```
 git clone https://github.com/theeye-io-team/theeye-of-sauron.git
  ./quickstart.sh
 ```
-
+## Second step is to import and configure your workflow.
 <table cellspacing="0" cellpadding="0">
    <tr>
     <td> Once is finished, please login at http://localhost:6080
