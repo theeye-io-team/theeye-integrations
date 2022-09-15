@@ -38,10 +38,10 @@ For more information, please refer to our [Documentation](https://documentation.
 3. Set your Github repository. 
    1.  Edit the task called *'Pull from GITHUB'*. You can edit the task by clicking on it and clicking 'Edit task' in the context menu
    2.  Scroll down to *Task Arguments* and edit them as needed:
-       * 1) The name of the repo
-       * 2) The installation source directory
-       * 3) The GitHub username of whom the repo belongs to
-       * 4) The GitHub user's access token, optional if the repo is public
+       * (1) The name of the repo
+       * (2) The installation source directory
+       * (3) The GitHub username of whom the repo belongs to
+       * (4) The GitHub user's access token, optional if the repo is public
 
     > **Note**
     > This workflow works with private and public repositories, but for this tutorial we are working on a public repository.
