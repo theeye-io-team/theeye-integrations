@@ -19,9 +19,9 @@ status = {
 r = requests.get('https://'+ domain +'.freshdesk.com/api/v2/search/tickets?query="status:2%20OR%20status:4%20OR%20status:6%20OR%20status:8%20OR%20status:9%20OR%20status:3"', auth = (api_key, password))
 
 tktList = {}
-output = ''
 
 def main():
+    output = ''
     if r.status_code == 200:
         result = json.loads(r.content.decode('utf-8'))
         txt = result
