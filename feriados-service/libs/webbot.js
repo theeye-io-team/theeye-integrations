@@ -28,23 +28,32 @@ if (!year) {
     await page.goto(url)
 
     return await page.evaluate((year)=> {
-    const eles=[]
-
-    document.getElementById('calendar-container')
-        .querySelectorAll('div.cont').forEach( (ccc, index) => { 
-        ccc.querySelectorAll('p').forEach(p => {
-        const text = p.innerText
-        if (/\([a|b|c]\)$/.test(text) === false) {
-            const day = Number(text.split('.')[0])
-            if(text || day!==0) {
-            const month = String(index + 1)
-            eles.push(`${String(day).length === 1 ? `0${day}` : day}-${month.length === 1 ? `0${month}` : month}-${year}`)
-            }
+        extractNumbers = (str) => {
+            const regex = /\d+(\.\d+)?/g
+            const matches = str.match(regex)
+            return matches.map(Number)
         }
-        })
-    })
 
-    return eles
+        const eles = []
+
+        document.getElementById('calendar-container')
+            .querySelectorAll('div.cont').forEach( (ccc, index) => { 
+            ccc.querySelectorAll('p').forEach(p => {
+            const text = p.innerText
+            if (/\([a|b|c]\)$/.test(text) === false) {
+                if(text) {
+                    const days = extractNumbers(text)
+                    for(const day of days) {
+                        if(day !== 0) {
+                            const month = String(index + 1)
+                            eles.push(`${String(day).length === 1 ? `0${day}` : day}-${month.length === 1 ? `0${month}` : month}-${year}`)        
+                        }
+                    }
+                }
+            }
+            })
+        })
+        return eles
     }, year)
 }
 
