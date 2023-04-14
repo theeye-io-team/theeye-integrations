@@ -5,7 +5,7 @@ const { DateTime } = require('luxon')
 if(!process.env.FERIADOS_WEBBOT_BASEURL) throw new Error('Env FERIADOS_WEBBOT_BASEURL not defined.')
 
 const browserOptions = {
-    headless: false,
+    headless: true,
     handleSIGINT: true,
     handleSIGTERM: true,
     handleSIGHUP: true,
