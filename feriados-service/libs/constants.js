@@ -1,4 +1,3 @@
-
 const WEBHOOK_TRANSPORT = 'webhook' 
 const EMAIL_TRANSPORT = 'email' 
 const THEEYE_FILE_TRANSPORT = 'file' 
