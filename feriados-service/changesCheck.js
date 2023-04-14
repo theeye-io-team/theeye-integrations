@@ -1,7 +1,6 @@
 require('dotenv').config({ path: './.env' })
 const {checkForChanges} = require('./libs/helpers')
 
-
 const main = module.exports = async (feriados) => {
   return await checkForChanges(feriados)
 }

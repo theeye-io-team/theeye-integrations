@@ -24,7 +24,7 @@ const checkForChanges = async (feriados, customer, access_token) => {
         await Files.Upsert(fileData, customer, access_token)
         return {
         data: [feriados],
-        event_name: 'file_created',
+        event_name: 'file_updated',
         }
     } else if (files.length === 1) {
         const fileContent = await Files.Download(files[0].id, customer, access_token)
@@ -40,10 +40,7 @@ const checkForChanges = async (feriados, customer, access_token) => {
         }
     
     } else {
-        return {
-            data: [],
-            event_name: 'error_multiple',
-        }
+        throw new Error('Multiple files with the same name defined in this customer')
     }
     
     return {
