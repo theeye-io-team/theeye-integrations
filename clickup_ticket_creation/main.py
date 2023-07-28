@@ -55,7 +55,7 @@ def main(id, name, group, source):
           'creator': 42935313
         }
       ],
-      "status": "Open",
+      "status": None,
       "priority": None,
       "due_date_time": False,
       "start_date_time": False,
