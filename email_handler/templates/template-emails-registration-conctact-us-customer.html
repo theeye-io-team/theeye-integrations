@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            font-size: 16px;
+            color: #000;
+            margin: 0;
+            padding: 50px 100px;
+            background: #f2f2f2;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            color: #004c97
+        }
+
+        h4 {
+            font-weight: 600;
+            color: #004c97;
+            font-size: 24px
+        }
+
+        .footer {
+            font-size: 14px;
+            text-align: center;
+            margin: 50px 0 30px;
+            padding: 10px;
+            border-top: 1px solid #ddd
+        }
+
+        p {
+            margin: 0
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="center">
+            <img src="cid:TheEye_isologotipo@cid" alt="TheEye" style="width:300px;">
+        </div>
+        <br />
+        <p>{{name}}</p>
+        <p>{{__ "email_contact_us_thank_you"}}</p>
+        <p>{{__ "email_contact_us_body"}}</p>
+
+        <h3>{{__ "email_contact_us_your_enquiry"}}:</h3>
+        <p><span>{{subject}}</span></p>
+        <p><span>{{text}}</span></p>
+        <br>
+        <p><b><span>{{__ "email_contact_us_sign"}}</span></b></p>
+        
+        <div class="footer">
+            THEEYE - {{__ "product_name"}} | theeye.io | Copyright &copy; 2023
+        </div>
+    </div>
+</body>
+
+</html>
