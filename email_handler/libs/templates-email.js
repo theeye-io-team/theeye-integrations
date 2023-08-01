@@ -3,7 +3,7 @@ const Handlebars = require('handlebars')
 const i18next = require('i18next')
 const HandlebarsI18n = require("handlebars-i18n")
 const translationTemplate = require('../templates/translation.json')
-
+const path = require('path')
 const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER = 'template-emails-registration-contact-us-customer.html'
 const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE = 'template-emails-registration-contact-us-theeye.html'
 
