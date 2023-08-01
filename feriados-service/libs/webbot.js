@@ -2,6 +2,8 @@ const puppeteer = require('puppeteer')
 const baseUrl = process.env.FERIADOS_WEBBOT_BASEURL
 const { DateTime } = require('luxon')
 
+if(!process.env.FERIADOS_WEBBOT_BASEURL) throw new Error('Env FERIADOS_WEBBOT_BASEURL not defined.')
+
 const browserOptions = {
     headless: true,
     handleSIGINT: true,
@@ -37,12 +39,13 @@ if (!year) {
         const eles = []
 
         document.getElementById('calendar-container')
-            .querySelectorAll('div.cont').forEach( (ccc, index) => { 
+            .querySelectorAll('div.holidays').forEach( (ccc, index) => { 
             ccc.querySelectorAll('p').forEach(p => {
             const text = p.innerText
             if (/\([a|b|c]\)$/.test(text) === false) {
                 if(text) {
                     const days = extractNumbers(text)
+                    console.log(text, days)
                     for(const day of days) {
                         if(day !== 0) {
                             const month = String(index + 1)
