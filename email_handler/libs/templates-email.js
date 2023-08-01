@@ -7,12 +7,19 @@ const path = require('path')
 const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER = 'template-emails-registration-contact-us-customer.html'
 const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE = 'template-emails-registration-contact-us-theeye.html'
 
+if(!process.env.BASE_PATH) throw new Error('BASE_PATH env not defined')
+
 // CONTACT US - CUSTOMER
 exports.generateHtmlRegistrationContactUsCustomer = (userData, subject, text, language) => {
     i18next.init(translationTemplate)
     HandlebarsI18n.init()
     // SI HAY UN CONFIGURE, VA ACA
-    const htmlTemplate = fs.readFileSync(path.resolve(path.join('..', 'templates', TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER)), 'utf8')
+    const htmlTemplate = fs.readFileSync(
+        path.join(
+            process.env.BASE_PATH, 
+            'templates', 
+            TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER
+            ), 'utf8')
     let compiled = Handlebars.compile(htmlTemplate)
     i18next.changeLanguage(language)
 
@@ -30,7 +37,12 @@ exports.generateHtmlRegistrationContactUsTheEye = (userData, subject, text, lang
     i18next.init(translationTemplate)
     HandlebarsI18n.init()
     // SI HAY UN CONFIGURE, VA ACA
-    const htmlTemplate = fs.readFileSync(path.resolve(path.join('..', 'templates', TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE)), 'utf8')
+    const htmlTemplate = fs.readFileSync(
+        path.join(
+            process.env.BASE_PATH, 
+            'templates', 
+            TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE),
+            'utf8')
     let compiled = Handlebars.compile(htmlTemplate)
     i18next.changeLanguage(language)
 
