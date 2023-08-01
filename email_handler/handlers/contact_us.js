@@ -88,7 +88,7 @@ const main = module.exports = async (payload) => {
 
     const attachments = [{
         filename: 'TheEye_isologotipo.png',
-        path: path.join(__dirname, '..', 'templates', 'images', 'TheEye_isologotipo.png'),
+        path: path.join('..', 'templates', 'images', 'TheEye_isologotipo.png'),
         cid: 'TheEye_isologotipo@cid'
     }]
 
@@ -186,6 +186,6 @@ if (require.main === module) {
         name: 'damian',
         default_language: 'es'
     })
-    
+
     main(payload).then(console.log).catch(console.error)
 }
