@@ -4,8 +4,8 @@ const i18next = require('i18next')
 const HandlebarsI18n = require("handlebars-i18n")
 const translationTemplate = require('../templates/translation.json')
 
-const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER = 'template-emails-registration-conctact-us-customer.html'
-const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE = 'template-emails-registration-conctact-us-theeye.html'
+const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER = 'template-emails-registration-contact-us-customer.html'
+const TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE = 'template-emails-registration-contact-us-theeye.html'
 
 // CONTACT US - CUSTOMER
 exports.generateHtmlRegistrationContactUsCustomer = (userData, subject, text, language) => {

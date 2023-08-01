@@ -2,7 +2,6 @@ const path = require('path')
 let Validator = require('validatorjs')
 const axios = require('axios')
 const i18next = require('i18next')
-
 const emailTemplates = require('../libs/templates-email')
 const email = require('../libs/email')
 
@@ -62,7 +61,7 @@ const validateParams = () => {
         }
 
         const fails = () => {
-            reject(_.values(validation.errors.errors).join(','))
+            reject(validation.errors)
         }
 
         validation.checkAsync(passes, fails)
@@ -173,11 +172,20 @@ class ClientError extends Error {
 }
 
 if (require.main === module) {
-    const payload = JSON.stringify({
+    const payload = {
         user: 'damian@theeye.io',
         subject: "Other",
         text: "test",
         customer: "theeye-services-hub"
-        })
+    }
+
+    process.env.THEEYE_JOB_USER = JSON.stringify({
+        id: '5ff31411a468c300127f3413',
+        email: 'damian@theeye.io',
+        username: 'damian',
+        name: 'damian',
+        default_language: 'es'
+    })
+    
     main(payload).then(console.log).catch(console.error)
 }
