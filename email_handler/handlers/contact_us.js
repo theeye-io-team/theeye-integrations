@@ -88,7 +88,7 @@ const main = module.exports = async (payload) => {
 
     const attachments = [{
         filename: 'TheEye_isologotipo.png',
-        path: path.join('..', 'templates', 'images', 'TheEye_isologotipo.png'),
+        path: path.join(process.env.BASE_PATH, 'templates', 'images', 'TheEye_isologotipo.png'),
         cid: 'TheEye_isologotipo@cid'
     }]
 
