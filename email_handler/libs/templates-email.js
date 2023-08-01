@@ -12,7 +12,7 @@ exports.generateHtmlRegistrationContactUsCustomer = (userData, subject, text, la
     i18next.init(translationTemplate)
     HandlebarsI18n.init()
     // SI HAY UN CONFIGURE, VA ACA
-    const htmlTemplate = fs.readFileSync(path.join('..', 'templates', TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER), 'utf8')
+    const htmlTemplate = fs.readFileSync(path.resolve(path.join('..', 'templates', TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_CUSTOMER)), 'utf8')
     let compiled = Handlebars.compile(htmlTemplate)
     i18next.changeLanguage(language)
 
@@ -30,7 +30,7 @@ exports.generateHtmlRegistrationContactUsTheEye = (userData, subject, text, lang
     i18next.init(translationTemplate)
     HandlebarsI18n.init()
     // SI HAY UN CONFIGURE, VA ACA
-    const htmlTemplate = fs.readFileSync(path.join('..', 'templates', TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE), 'utf8')
+    const htmlTemplate = fs.readFileSync(path.resolve(path.join('..', 'templates', TEMPLATE_EMAILS_REGISTRATION_CONTACT_US_THEEYE)), 'utf8')
     let compiled = Handlebars.compile(htmlTemplate)
     i18next.changeLanguage(language)
 
