@@ -31,9 +31,10 @@ if (!year) {
 
     return await page.evaluate((year)=> {
         extractNumbers = (str) => {
-            const regex = /\d+(\.\d+)?/g
+            const regex = /^([0-9]*(\s|,)?)*./
             const matches = str.match(regex)
-            return matches.map(Number)
+            const numbers = matches[0].replace('.','').split(',')
+            return numbers.map(Number)
         }
 
         const eles = []
