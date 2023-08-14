@@ -5,6 +5,7 @@ const serviceCustomers = require('../config/service-customers.json')
 const Transports = require('./constants')
 const sendEmail = require('./sender')
 const Request = require('./req')
+const { GCHAT } = require('./google-chat')
 if(!process.env.THEEYE_ACCESS_TOKEN) throw new Error('Env THEEYE_ACCESS_TOKEN not defined.')
 
 
@@ -32,11 +33,12 @@ const checkForChanges = async (feriados, customer, access_token) => {
         const newFileFingerprint = generateFingerprint(JSON.stringify(feriados))
     
         if(fileFingerprint !== newFileFingerprint) {
-        await Files.Upsert(fileData, customer, access_token)
-        return {
-            data: [feriados],
-            event_name: 'file_updated',
-        }
+            await new GCHAT().sendMessage(JSON.stringify({old: fileContent, new: feriados},null,2))
+            await Files.Upsert(fileData, customer, access_token)
+            return {
+                data: [feriados],
+                event_name: 'file_updated',
+            }
         }
     
     } else {
