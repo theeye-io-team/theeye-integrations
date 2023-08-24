@@ -1,6 +1,6 @@
 // use GOOGLE_APPLICATION_CREDENTIALS to load service account
 const config = require('../config/config.json')
-process.env.GOOGLE_APPLICATION_CREDENTIALS??=config.service_account.path
+process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS || config.service_account.path
 
 const Vision = require('@google-cloud/vision')
 const vision = new Vision.ImageAnnotatorClient()
