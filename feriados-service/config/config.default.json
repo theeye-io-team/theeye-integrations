@@ -1,0 +1,11 @@
+{
+    "api": {
+        "gchat": {
+            "baseUrl":"https://chat.googleapis.com/v1/spaces/[space]/messages?key=[key]&token=[token]",
+            "token":"",
+            "key":"",
+            "space":"",
+            "enable":false
+        }
+    }
+}

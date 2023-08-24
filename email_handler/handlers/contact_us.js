@@ -1,5 +1,4 @@
 const path = require('path')
-let Validator = require('validatorjs')
 const axios = require('axios')
 const i18next = require('i18next')
 const emailTemplates = require('../libs/templates-email')
@@ -46,45 +45,50 @@ const prepareGChatPayload = (payload) => {
 
 console.log('processParams', processParams)
 
-const validateParams = () => {
-    return new Promise(async (resolve, reject) => {
+const handleWhitelabelAddress = () => {
+    const whitelabel = config.output.email_contact_us.whitelabel_url
 
-        let validationRules = {
-            subject: ['required'],
-            text: ['required']
-        }
+    for(const {url,address_to} of whitelabel) 
+        if(url === processParams.origin) return address_to
 
-        let validation = new Validator(processParams, validationRules)
+    // Fallback
+    return config.output.email_contact_us.address_to
+}
 
-        const passes = () => {
-            resolve(true)
-        }
+const validateParams = async () => {
 
-        const fails = () => {
-            reject(validation.errors)
-        }
+    if (!processParams.text || !processParams.subject || !processParams.access_token) throw new Error('Missing text/subject/token')
 
-        validation.checkAsync(passes, fails)
-    })
+    try {
+        const session = await axios({
+            method: 'get',
+            url: 'https://app.theeye.io/api/session/profile',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                'Authorization': `Bearer ${processParams.access_token}`
+            }
+        })
+
+        return session.data
+    } catch (err) {
+        throw new Error('invalid session token')
+    }
+
 }
 
 const main = module.exports = async (payload) => {
+    let userData
 
     // Validación de parámetros
     try {
         processParams = payload
-        await validateParams()
+        userData = await validateParams()
     } catch (err) {
         throw new ClientError(err, { statusCode: 400 })
     }
 
-    const userData = JSON.parse(process.env.THEEYE_JOB_USER)
-    
     userData.name = userData.username || userData.email
     userData.default_language = 'es'
-
-    // API -  Obtenemos el usuario
-    console.log('userData', userData)
 
     const attachments = [{
         filename: 'TheEye_isologotipo.png',
@@ -95,33 +99,33 @@ const main = module.exports = async (payload) => {
     // EMAIL - Confirmación de email
     console.log('Email Contact US - CUSTOMER')
     const htmlEmailRegistrationEmailContactUsCustomer = emailTemplates.generateHtmlRegistrationContactUsCustomer(
-        userData, 
-        processParams.subject, 
-        processParams.text, 
+        userData,
+        processParams.subject,
+        processParams.text,
         userData.default_language
     )
 
     const emailOptionsContactUsCustomer = email.prepareEmailOptions(
-        attachments, 
-        i18next.t('email_contact_us_subject'), 
-        htmlEmailRegistrationEmailContactUsCustomer, 
+        attachments,
+        i18next.t('email_contact_us_subject'),
+        htmlEmailRegistrationEmailContactUsCustomer,
         userData.email
     )
 
     // EMAIL - Confirmación de email
     console.log('Email Contact US - THEEYE')
     const htmlEmailRegistrationEmailContactUsTheEye = emailTemplates.generateHtmlRegistrationContactUsTheEye(
-        userData, 
-        processParams.subject, 
-        processParams.text, 
+        userData,
+        processParams.subject,
+        processParams.text,
         userData.default_language
     )
 
     const emailOptionsContactUsTheEye = email.prepareEmailOptions(
-        attachments, 
-        i18next.t('email_contact_us_subject'), 
-        htmlEmailRegistrationEmailContactUsTheEye, 
-        config.output.email_contact_us.address_to
+        attachments,
+        i18next.t('email_contact_us_subject'),
+        htmlEmailRegistrationEmailContactUsTheEye,
+        handleWhitelabelAddress()
     )
 
     // CHAT - Webhook grupo soporte
@@ -173,19 +177,13 @@ class ClientError extends Error {
 
 if (require.main === module) {
     const payload = {
-        user: 'damian@theeye.io',
+        user: "damian",
         subject: "Other",
-        text: "test",
-        customer: "theeye-services-hub"
+        text: "sadsafsafsaf",
+        customer: "theeye-services-hub",
+        access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhbWlhbkB0aGVleWUuaW8iLCJ1c2VybmFtZSI6ImRhbWlhbiIsInVzZXJfaWQiOiI1ZmYzMTQxMWE0NjhjMzAwMTI3ZjM0MTMiLCJvcmdfdXVpZCI6InRoZWV5ZS1zZXJ2aWNlcy1odWIiLCJpYXQiOjE2OTEwODQ5MDksImV4cCI6MTY5MTE3MTMwOX0.GNhIGrutR1WSklTovtAXmGGn71n-PdudMTV3IgPTzOQ",
+        origin: "https://tr-digitai.theeye.io"
     }
-
-    process.env.THEEYE_JOB_USER = JSON.stringify({
-        id: '5ff31411a468c300127f3413',
-        email: 'damian@theeye.io',
-        username: 'damian',
-        name: 'damian',
-        default_language: 'es'
-    })
 
     main(payload).then(console.log).catch(console.error)
 }
