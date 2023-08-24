@@ -1,6 +1,6 @@
 const vision = require('./lib/vision')
 
-const main = async (base64, {regexp}) => {
+const main = module.exports = async (base64, {regexp}) => {
     const [annotation]= await vision(base64)
 
     const result = {
