@@ -2,25 +2,36 @@ import requests
 import json
 import os
 
-def updateTicket(url, id):
-  api_key = os.environ.get('FRESHDESK_KEY')
-  password = 'x'
+def updateTicket(url, id, api_key, password):
   headers = {
-      "Content-Type": "application/json" 
+    "Content-Type": "application/json" 
   }
   query = '{ "custom_fields" : { "cf_si": "'+url+'"} }'
   
   r = requests.put('https://theeye.freshdesk.com/api/v2/tickets/' + str(id), auth = (api_key, password), data = query, headers=headers)
 
+def get_description(id, api_key, password):
+  headers = {
+    "Content-Type": "application/json" 
+  }
+
+  r = requests.get('https://theeye.freshdesk.com/api/v2/tickets/' + str(id), auth = (api_key, password), headers=headers)
+  result = json.loads(r.content.decode('utf-8'))
+  
+  return result['description_text']
 
 def main(id, name, group, source):
   token = os.environ.get('CLICKUP_TOKEN')
   folderId = os.environ.get('FOLDER_ID')
+  api_key = os.environ.get('FRESHDESK_KEY')
+  password = os.environ.get('FRESHDESK_PASS')
 
   headers = {
     'Authorization': token,
     'Content-Type': 'application/json'
   }
+
+  description = get_description(id, api_key, password)
 
   listas = {}
 
@@ -43,7 +54,7 @@ def main(id, name, group, source):
 
   values = json.dumps({
       "name": subject,
-      "description": "New Task Description",
+      "description": description,
       "assignees": [
 
       ],
@@ -68,4 +79,4 @@ def main(id, name, group, source):
   result = json.loads(request.content.decode('utf-8'))
   url = result['url']
 
-  updateTicket(url, id)
+  updateTicket(url, id, api_key, password)
