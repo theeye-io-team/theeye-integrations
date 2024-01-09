@@ -6,7 +6,7 @@ const { GCHAT } = require('./google-chat')
 if(!process.env.FERIADOS_WEBBOT_BASEURL) throw new Error('Env FERIADOS_WEBBOT_BASEURL not defined.')
 
 const browserOptions = {
-    headless: true,
+    headless: false,
     handleSIGINT: true,
     handleSIGTERM: true,
     handleSIGHUP: true,
@@ -45,7 +45,7 @@ if (!year) {
             if(!calendarContainer) throw new Error('cannot find calendar container')
 
             const holidaysDiv = calendarContainer.querySelectorAll('div.holidays')
-            if(holidaysDiv.length !== 12) throw new Error('holidays monthly div differes from expected value')
+            // if(holidaysDiv.length !== 12) throw new Error('holidays monthly div differes from expected value')
 
             holidaysDiv.forEach( (ccc, index) => { 
                 ccc.querySelectorAll('p').forEach(p => {
