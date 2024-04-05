@@ -2,7 +2,12 @@ import requests
 import json
 import os
 
-def updateTicket(url, id, api_key, password):
+token = os.environ.get('CLICKUP_TOKEN')
+folder_id = os.environ.get('FOLDER_ID')
+api_key = os.environ.get('FRESHDESK_KEY')
+password = os.environ.get('FRESHDESK_PASS')
+
+def updateTicket(url, id):
   headers = {
     "Content-Type": "application/json" 
   }
@@ -10,7 +15,7 @@ def updateTicket(url, id, api_key, password):
   
   r = requests.put('https://theeye.freshdesk.com/api/v2/tickets/' + str(id), auth = (api_key, password), data = query, headers=headers)
 
-def get_description(id, api_key, password):
+def get_description(id):
   headers = {
     "Content-Type": "application/json" 
   }
@@ -21,36 +26,31 @@ def get_description(id, api_key, password):
   return result['description_text']
 
 def main(id, name, group, source):
-  token = os.environ.get('CLICKUP_TOKEN')
-  folderId = os.environ.get('FOLDER_ID')
-  api_key = os.environ.get('FRESHDESK_KEY')
-  password = os.environ.get('FRESHDESK_PASS')
+  if group == 'Banco Comafi' and source == 'Email': 
+    return None
 
   headers = {
     'Authorization': token,
     'Content-Type': 'application/json'
   }
+  description = get_description(id)
+  clickup_folder = {}
+  company_folder = ''
+  subject = str(id) +' - '+ str(name) 
 
-  description = get_description(id, api_key, password)
-
-  listas = {}
-
-  request_list = requests.get('https://api.clickup.com/api/v2/folder/'+folderId+'/list', headers=headers)
+  request_list = requests.get('https://api.clickup.com/api/v2/folder/'+folder_id+'/list', headers=headers)
   
   result_list = json.loads(request_list.content.decode('utf-8'))
-
+  
   for i in result_list['lists']:
-    listas[i['name']] = i['id']
+    clickup_folder[i['name']] = i['id']
 
-  if group == 'Banco Comafi' and source == 'Email':
-    return None
-
-  subject = str(id) +' - '+ str(name) 
-  goto = ''
-
-  for i in listas:
+  for i in clickup_folder:
     if i.lower() in group.lower():
-      goto = listas[i]
+      company_folder = clickup_folder[i]
+
+  if company_folder == '': 
+    company_folder = clickup_folder['Default'] 
 
   values = json.dumps({
       "name": subject,
@@ -74,9 +74,9 @@ def main(id, name, group, source):
       "check_required_custom_fields": False
   })
 
-  request = requests.post('https://api.clickup.com/api/v2/list/'+ goto +'/task', data=values, headers=headers)
+  request = requests.post('https://api.clickup.com/api/v2/list/'+ company_folder +'/task', data=values, headers=headers)
 
   result = json.loads(request.content.decode('utf-8'))
   url = result['url']
 
-  updateTicket(url, id, api_key, password)
+  updateTicket(url, id)
