@@ -16,7 +16,7 @@ const main = module.exports = async (data) => {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   }
-  const thread_id = ticket_id
+  const thread_id = ticket_id.toString()
 
   const body = JSON.stringify({ text: `nuevo ticket ${ticket_id} en freshdesk. asunto: ${ticket_subject}`, thread: {"threadKey":thread_id}})
   const main_res = await axios.post(url, body, { headers: headers})
