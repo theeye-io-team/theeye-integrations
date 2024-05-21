@@ -20,10 +20,12 @@ const main = module.exports = async (data) => {
   const thread_id = moment().toISOString()
 
   const body = JSON.stringify({ text: `nuevo ticket ${ticket_id} en freshdesk. asunto: ${ticket_subject}`, thread: {"threadKey":thread_id}})
-  await axios.post(url, body, { headers: headers})
+  const main_res = await axios.post(url, body, { headers: headers})
+  console.log(main_res)
   
   const thread_body = JSON.stringify({ text: thread_text, thread: {"threadKey":thread_id} })
-  await axios.post(url, thread_body, { headers: headers})
+  const thread_res = await axios.post(url, thread_body, { headers: headers})
+  console.log(thread_res)
 }
 
 if(require.main === module) {
