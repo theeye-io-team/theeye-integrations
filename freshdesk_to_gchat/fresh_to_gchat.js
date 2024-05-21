@@ -2,8 +2,8 @@ const axios = require('axios')
 const { convert } = require('html-to-text');
 const moment = require('moment')
 
-const main = module.exports = async () => {
-  const payload = JSON.parse(process.argv[2])
+const main = module.exports = async (data) => {
+  const payload = data
   console.log(payload)
 
   const { ticket_id, ticket_status, ticket_subject, ticket_description } = payload.freshdesk_webhook
@@ -27,5 +27,5 @@ const main = module.exports = async () => {
 }
 
 if(require.main === module) {
-  main().then(console.log).catch(console.error)
+  main(data).then(console.log).catch(console.error)
 }
