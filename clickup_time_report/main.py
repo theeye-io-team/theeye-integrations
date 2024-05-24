@@ -10,7 +10,7 @@ def convertMillis(millis):
   minutes = int((millis/(1000*60))%60)/60
   hours = int((millis/(1000*60*60))%24)
   total = hours + minutes
-  return ('%.2f' %total).replace('.',',')
+  return ('%.2f' %total)
 
 def convertTime(timestamp):
   timestamp = int(timestamp)/1000
@@ -64,7 +64,8 @@ def main(fromDate, toDate, id, multiplier, filename):
       export.append(convertTime(i['start']))
       export.append(convertTime(i['end'])) 
       duration = convertMillis(i['duration'])
-      if multiplier != '': duration = duration * int(multiplier)
+      print(type(duration))
+      if multiplier != '': duration = float(duration) * int(multiplier)
       export.append(duration)
       
       writer.writerow(export)
