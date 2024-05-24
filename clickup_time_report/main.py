@@ -64,7 +64,7 @@ def main(fromDate, toDate, id, multiplier, filename):
       export.append(convertTime(i['start']))
       export.append(convertTime(i['end'])) 
       duration = convertMillis(i['duration'])
-      if multiplier != '': duration = duration * multiplier
+      if multiplier != '': duration = duration * int(multiplier)
       export.append(duration)
       
       writer.writerow(export)
