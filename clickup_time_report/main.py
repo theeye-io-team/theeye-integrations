@@ -33,7 +33,7 @@ def getMembers(list_id, headers):
 
   return member_list
 
-def main(fromDate, toDate, id, filename):
+def main(fromDate, toDate, id, multiplier, filename):
   token = os.environ.get('CLICKUP_TOKEN')
   headers = {
     'Authorization': token
@@ -63,6 +63,8 @@ def main(fromDate, toDate, id, filename):
       export.append(i['tags'])
       export.append(convertTime(i['start']))
       export.append(convertTime(i['end'])) 
-      export.append(convertMillis(i['duration']))
+      duration = convertMillis(i['duration'])
+      if multiplier != '': duration = duration * multiplier
+      export.append(duration)
       
       writer.writerow(export)
