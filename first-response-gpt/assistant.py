@@ -74,9 +74,11 @@ def main(payload):
   assist_id = ''
 
   print(assistants)
-  for key in assistants:
-    if key in payload['freshdesk_webhook']['ticket_company_name'].lower():
-      assist_id = assistants[key]
+  if not config['always_default']:
+    for key in assistants:
+      if payload['freshdesk_webhook']['ticket_company_name'] != None:
+        if key in payload['freshdesk_webhook']['ticket_company_name'].lower():
+          assist_id = assistants[key]
 
   if assist_id == '': assist_id = assistants['default']
 
