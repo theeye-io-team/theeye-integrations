@@ -74,7 +74,8 @@ def main(payload):
   assist_id = ''
 
   print(assistants)
-  if not config['always_default']:
+  default = config['always_default'] 
+  if not default:
     for key in assistants:
       if key in payload['freshdesk_webhook']['ticket_company_name'].lower():
         assist_id = assistants[key]
