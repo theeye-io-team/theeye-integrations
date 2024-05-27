@@ -5,7 +5,7 @@ import time
 import json
 import os
 
-with open('config.json') as config_file:
+with open(os.environ['CONFIG_PATH']) as config_file:
   config = json.load(config_file)
 
 client = OpenAI(api_key=os.environ['API_KEY'])
