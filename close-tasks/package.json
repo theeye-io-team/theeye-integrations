@@ -1,0 +1,15 @@
+{
+  "name": "close-tasks",
+  "version": "1.0.0",
+  "description": "Cierra tareas de ClickUp a partir de webhooks de Freshdesk",
+  "main": "closeTask.js",
+  "scripts": {
+    "start": "node closeTask.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
