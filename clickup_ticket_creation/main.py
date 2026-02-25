@@ -38,9 +38,13 @@ group_assignee_rules = [
     ('exolgan', ['agustin.demarco@theeye.io', 'facugon@theeye.io']),
     ('kavak', ['santiago.laplume@theeye.io', 'maria@theeye.io']),
     ('la segunda', ['facugon@theeye.io', 'maria@theeye.io']),
-    ('rapicuotas', ['guidoher@theeye.io']),
+    ('rapicuotas', ['guidoher@theeye.io', 'agustin.demarco@theeye.io']),
     ('kompass', ['guidoher@theeye.io']),
-    ('vetanco', ['santiago.laplume@theeye.io']),
+    ('corteva', ['guidoher@theeye.io']),
+    ('nxt', ['agustin.demarco@theeye.io']),
+    ('vetanco', ['santiago.laplume@theeye.io', 'damian@theeye.io']),
+    ('consorcio abierto', ['facugon@theeye.io', 'maria@theeye.io']),
+    ('abbfpw', ['santiago.laplume@theeye.io', 'agustin.demarco@theeye.io'])
 ]
 
 def updateTicket(url, id):
@@ -62,7 +66,8 @@ def get_description(id):
   return result['description_text']
 
 def get_assignees(servicio, group):
-  assignee_ids = []
+  default_uid = members_by_email.get('agustin.demarco@theeye.io')
+  assignee_ids = [default_uid] if default_uid else []
   servicio_lower = servicio.lower()
   group_lower = group.lower()
 
@@ -139,6 +144,10 @@ def main(id, name, group, source, servicio):
           {
               "id": "3fad5160-2049-4e74-ad6b-ea6a13f2f1aa",
               "value": group
+          },
+          {
+              "id": "3f7c2ea7-03a1-4d09-b6b7-37879f1c2be5",
+              "value": "https://theeye.freshdesk.com/a/tickets/" + str(id)
           }
       ]
   })
