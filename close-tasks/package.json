@@ -7,6 +7,7 @@
     "start": "node closeTask.js"
   },
   "dependencies": {
+    "@google/genai": "^1.0.0",
     "dotenv": "^16.4.7"
   },
   "engines": {
