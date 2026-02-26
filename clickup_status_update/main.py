@@ -6,12 +6,12 @@ import re
 token = os.environ.get('CLICKUP_TOKEN')
 
 STATUS_MAP = {
-    'resuelto': 'ready to test',
+    'resolved': 'ready to test',
     'en proceso': 'in progress',
     'pruebas usuarios': 'in progress',
     'reabierto': 'in progress',
     'waiting on customer': 'in progress',
-    'pendiente': 'open',
+    'pending': 'open',
     'abierto': 'open',
 }
 
